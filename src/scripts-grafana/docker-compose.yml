@@ -1,0 +1,17 @@
+services:
+  alloy:
+    image: grafana/alloy:v1.20.1
+    ports:
+      - 12345:12345
+      - 4318:4318
+      - 4317:4317
+    volumes:
+      - ./config.alloy:/etc/alloy/config.alloy
+    environment:
+      #${GRAFANA_CLOUD_OTLP_ENDPOINT:?Set the Grafana Cloud OTLP endpoint}
+      GRAFANA_CLOUD_OTLP_ENDPOINT: https://otlp-gateway-prod-sa-east-1.grafana.net/otlp
+      #${GRAFANA_CLOUD_INSTANCE_ID:?Set the Grafana Cloud instance ID}
+      GRAFANA_CLOUD_INSTANCE_ID: INSTANCE_ID
+      #${GRAFANA_CLOUD_API_TOKEN:?Set a Grafana Cloud token with logs and traces write permissions}
+      GRAFANA_CLOUD_API_TOKEN: glc_GRAFANA_CLOUD_API_TOKEN
+    command: run --server.http.listen-addr=0.0.0.0:12345 --storage.path=/var/lib/alloy/data /etc/alloy/config.alloy
